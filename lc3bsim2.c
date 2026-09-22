@@ -464,7 +464,7 @@ void process_instruction(){
         }
         break;
     case 0b0000: //BR (All forms) & NOP
-        if((NEXT_LATCHES.P && ((instruction & 0b1<<9)>>9))||(NEXT_LATCHES.Z && ((instruction & 0b1<<10)>>10))||(NEXT_LATCHES.Z && ((instruction & 0b1<<11)>>11))){
+        if((NEXT_LATCHES.P && ((instruction & 0b1<<9)>>9))||(NEXT_LATCHES.Z && ((instruction & 0b1<<10)>>10))||(NEXT_LATCHES.N && ((instruction & 0b1<<11)>>11))){
             NEXT_LATCHES.PC += Low16bits(sext(instruction & 0b111111111, 9)<<1);
         }
         break;
@@ -474,9 +474,9 @@ void process_instruction(){
     case 0b0100: {//JSR & JSRR
         uint16_t TEMP = Low16bits(NEXT_LATCHES.PC);
         if((instruction>>11 & 0b1)==0){
-            NEXT_LATCHES.PC = (instruction>>6 & 0b111);
+            NEXT_LATCHES.PC = NEXT_LATCHES.REGS[instruction>>6 & 0b111];
         }else {
-            NEXT_LATCHES.PC += Low16bits(NEXT_LATCHES.PC += sext(instruction & 0b11111111111,11)<<1);
+            NEXT_LATCHES.PC += Low16bits(NEXT_LATCHES.PC + (sext(instruction & 0b11111111111,11)<<1));
         }
         NEXT_LATCHES.REGS[7] = TEMP;
         break;}
