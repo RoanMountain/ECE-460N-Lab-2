@@ -1,12 +1,7 @@
 /*
-    Remove all unnecessary lines (including this one) 
-    in this comment.
-    REFER TO THE SUBMISSION INSTRUCTION FOR DETAILS
 
-    Name 1: Full name of the first partner 
-    Name 2: Full name of the second partner
-    UTEID 1: UT EID of the first partner
-    UTEID 2: UT EID of the second partner
+    Name: Alex Vincent
+    UTEID: ARV2599
 */
 
 /***************************************************************/
@@ -19,6 +14,7 @@
 /***************************************************************/
 
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,10 +46,10 @@ void process_instruction();
 /* Main memory.                                                */
 /***************************************************************/
 /* MEMORY[A][0] stores the least significant byte of word at word address A
-   MEMORY[A][1] stores the most significant byte of word at word address A 
+   MEMORY[A][1] stores the most significant byte of word at word address A
 */
 
-#define WORDS_IN_MEM    0x08000 
+#define WORDS_IN_MEM    0x08000
 int MEMORY[WORDS_IN_MEM][2];
 
 /***************************************************************/
@@ -93,7 +89,7 @@ int INSTRUCTION_COUNT;
 /* Purpose   : Print out a list of commands                    */
 /*                                                             */
 /***************************************************************/
-void help() {                                                    
+void help() {
   printf("----------------LC-3b ISIM Help-----------------------\n");
   printf("go               -  run program to completion         \n");
   printf("run n            -  execute program for n instructions\n");
@@ -110,7 +106,7 @@ void help() {
 /* Purpose   : Execute a cycle                                 */
 /*                                                             */
 /***************************************************************/
-void cycle() {                                                
+void cycle() {
 
   process_instruction();
   CURRENT_LATCHES = NEXT_LATCHES;
@@ -124,7 +120,7 @@ void cycle() {
 /* Purpose   : Simulate the LC-3b for n cycles                 */
 /*                                                             */
 /***************************************************************/
-void run(int num_cycles) {                                      
+void run(int num_cycles) {
   int i;
 
   if (RUN_BIT == FALSE) {
@@ -150,7 +146,7 @@ void run(int num_cycles) {
 /* Purpose   : Simulate the LC-3b until HALTed                 */
 /*                                                             */
 /***************************************************************/
-void go() {                                                     
+void go() {
   if (RUN_BIT == FALSE) {
     printf("Can't simulate, Simulator is halted\n\n");
     return;
@@ -163,7 +159,7 @@ void go() {
   printf("Simulator halted\n\n");
 }
 
-/***************************************************************/ 
+/***************************************************************/
 /*                                                             */
 /* Procedure : mdump                                           */
 /*                                                             */
@@ -171,7 +167,7 @@ void go() {
 /*             output file.                                    */
 /*                                                             */
 /***************************************************************/
-void mdump(FILE * dumpsim_file, int start, int stop) {          
+void mdump(FILE * dumpsim_file, int start, int stop) {
   int address; /* this is a byte address */
 
   printf("\nMemory content [0x%.4x..0x%.4x] :\n", start, stop);
@@ -193,12 +189,12 @@ void mdump(FILE * dumpsim_file, int start, int stop) {
 /*                                                             */
 /* Procedure : rdump                                           */
 /*                                                             */
-/* Purpose   : Dump current register and bus values to the     */   
+/* Purpose   : Dump current register and bus values to the     */
 /*             output file.                                    */
 /*                                                             */
 /***************************************************************/
-void rdump(FILE * dumpsim_file) {                               
-  int k; 
+void rdump(FILE * dumpsim_file) {
+  int k;
 
   printf("\nCurrent register/bus values :\n");
   printf("-------------------------------------\n");
@@ -227,10 +223,10 @@ void rdump(FILE * dumpsim_file) {
 /*                                                             */
 /* Procedure : get_command                                     */
 /*                                                             */
-/* Purpose   : Read a command from standard input.             */  
+/* Purpose   : Read a command from standard input.             */
 /*                                                             */
 /***************************************************************/
-void get_command(FILE * dumpsim_file) {                         
+void get_command(FILE * dumpsim_file) {
   char buffer[20];
   int start, stop, cycles;
 
@@ -282,7 +278,7 @@ void get_command(FILE * dumpsim_file) {
 /* Purpose   : Zero out the memory array                       */
 /*                                                             */
 /***************************************************************/
-void init_memory() {                                           
+void init_memory() {
   int i;
 
   for (i=0; i < WORDS_IN_MEM; i++) {
@@ -298,7 +294,7 @@ void init_memory() {
 /* Purpose   : Load program and service routines into mem.    */
 /*                                                            */
 /**************************************************************/
-void load_program(char *program_filename) {                   
+void load_program(char *program_filename) {
   FILE * prog;
   int ii, word, program_base;
 
@@ -341,20 +337,20 @@ void load_program(char *program_filename) {
 /*                                                          */
 /* Procedure : initialize                                   */
 /*                                                          */
-/* Purpose   : Load machine language program                */ 
+/* Purpose   : Load machine language program                */
 /*             and set up initial state of the machine.     */
 /*                                                          */
 /************************************************************/
-void initialize(char *files[], int num_prog_files) { 
+void initialize(char *files[], int num_prog_files) {
   int i;
 
   init_memory();
   for ( i = 0; i < num_prog_files; i++ ) {
     load_program(files[i]);
   }
-  CURRENT_LATCHES.Z = 1;  
+  CURRENT_LATCHES.Z = 1;
   NEXT_LATCHES = CURRENT_LATCHES;
-    
+
   RUN_BIT = TRUE;
 }
 
@@ -363,7 +359,7 @@ void initialize(char *files[], int num_prog_files) {
 /* Procedure : main                                            */
 /*                                                             */
 /***************************************************************/
-int main(int argc, char *argv[]) {                              
+int main(int argc, char *argv[]) {
   FILE * dumpsim_file;
 
   /* Error Checking */
@@ -384,7 +380,7 @@ int main(int argc, char *argv[]) {
 
   while (1)
     get_command(dumpsim_file);
-    
+
 }
 
 /***************************************************************/
@@ -409,12 +405,158 @@ int main(int argc, char *argv[]) {
 
 void process_instruction(){
   /*  function: process_instruction
-   *  
-   *    Process one instruction at a time  
+   *
+   *    Process one instruction at a time
    *       -Fetch one instruction
-   *       -Decode 
+   *       -Decode
    *       -Execute
    *       -Update NEXT_LATCHES
-   */     
+   */
+  uint16_t instruction = (MEMORY[CURRENT_LATCHES.PC][0] & 0x00FF) + (MEMORY[CURRENT_LATCHES.PC][1]<<8 & 0xFF00); // Get instruction from MEMORY[PC] 0 and 1
+  CURRENT_LATCHES.PC++; // Increment PC
+  switch ((instruction & 0xFF00)>>12) {   // Decode instruction (1st 4 bits from PC into switch statement)
+    case 0b0001: //ADD (Reg and Imm)
+        if((instruction & 0b1<<5)==0){
+            CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] + CURRENT_LATCHES.REGS[instruction & 0b111]);
+        }else {
+            CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] + (instruction & 0b11111));
+        }
+            CURRENT_LATCHES.Z = 0;
+            CURRENT_LATCHES.P = 0;
+            CURRENT_LATCHES.N = 0;
+        if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] == 0){
+            CURRENT_LATCHES.Z = 1;
+        }else if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] > 0){
+            CURRENT_LATCHES.P = 1;
+        }else{
+            CURRENT_LATCHES.N = 1;
+        }
+        break;
+    case 0b0101: //AND (Reg and Imm)
+        if((instruction & 0b1<<5)==0){
+            CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] & CURRENT_LATCHES.REGS[instruction & 0b111]);
+        }else {
+            CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] & (instruction & 0b11111));
+        }
+            CURRENT_LATCHES.Z = 0;
+            CURRENT_LATCHES.P = 0;
+            CURRENT_LATCHES.N = 0;
+        if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] == 0){
+            CURRENT_LATCHES.Z = 1;
+        }else if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] > 0){
+            CURRENT_LATCHES.P = 1;
+        }else{
+            CURRENT_LATCHES.N = 1;
+        }
+        break;
+    case 0b0000: //BR (All forms) & NOP
+        if((CURRENT_LATCHES.P && ((instruction & 0b1<<9)>>9))||(CURRENT_LATCHES.Z && ((instruction & 0b1<<10)>>10))||(CURRENT_LATCHES.Z && ((instruction & 0b1<<11)>>11))){
+            CURRENT_LATCHES.PC += Low16bits((instruction & 0b111111111)<<1);
+        }
+        break;
+    case 0b1100: //JMP & RET
+            CURRENT_LATCHES.PC = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111]);
+        break;
+    case 0b0100: {//JSR & JSRR
+        uint16_t TEMP = Low16bits(CURRENT_LATCHES.PC);
+        if((instruction>>11 & 0b1)==0){
+            CURRENT_LATCHES.PC = (instruction>>6 & 0b111);
+        }else {
+            CURRENT_LATCHES.PC += Low16bits(CURRENT_LATCHES.PC += (instruction & 0b11111111111)<<1);
+        }
+        CURRENT_LATCHES.REGS[7] = TEMP;
+        break;}
+    case 0b0010:{ //LDB
+        int address = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] + (instruction & 0b111111));
+        CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(MEMORY[address>>1][address & 0b1]);
+        CURRENT_LATCHES.Z = 0;
+        CURRENT_LATCHES.P = 0;
+        CURRENT_LATCHES.N = 0;
+        if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] == 0){
+            CURRENT_LATCHES.Z = 1;
+        }else if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] > 0){
+            CURRENT_LATCHES.P = 1;
+        }else{
+            CURRENT_LATCHES.N = 1;
+        }
+        break;}
+    case 0b0110:{ //LDW
+        int address = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] + (instruction & 0b111111));
+        CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits((MEMORY[address][1]<<8) + MEMORY[address][0]);
+        CURRENT_LATCHES.Z = 0;
+        CURRENT_LATCHES.P = 0;
+        CURRENT_LATCHES.N = 0;
+        if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] == 0){
+            CURRENT_LATCHES.Z = 1;
+        }else if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] > 0){
+            CURRENT_LATCHES.P = 1;
+        }else{
+            CURRENT_LATCHES.N = 1;
+        }
+        break;}
+    case 0b1110: //LEA
+        CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(CURRENT_LATCHES.PC + (instruction & 0b111111111));
+        break;
+    case 0b1001: //NOT & XOR
+        if((instruction & 0b1<<5)==0){
+            CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] ^ CURRENT_LATCHES.REGS[instruction & 0b111]);
+        }else {
+            CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] ^ (instruction & 0b11111));
+        }
+        CURRENT_LATCHES.Z = 0;
+        CURRENT_LATCHES.P = 0;
+        CURRENT_LATCHES.N = 0;
+        if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] == 0){
+            CURRENT_LATCHES.Z = 1;
+        }else if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] > 0){
+            CURRENT_LATCHES.P = 1;
+        }else{
+            CURRENT_LATCHES.N = 1;
+        }
+        break;
+    case 0b1000: //RTI
+        // Does not need to be implemented! Woohoo!
+        break;
+    case 0b1101: //LSHF & RSHFL & RSHFA
+        if((instruction & 0b1<<4)==0){
+            CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] << (instruction & 0b1111));
+        }else if((instruction & 0b1<<5)==0){
+            CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits((uint16_t) CURRENT_LATCHES.REGS[instruction>>6 & 0b111] >> (instruction & 0b11111));
+        }else {
+            CURRENT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] >> (instruction & 0b11111));
+        }
+        CURRENT_LATCHES.Z = 0;
+        CURRENT_LATCHES.P = 0;
+        CURRENT_LATCHES.N = 0;
+        if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] == 0){
+            CURRENT_LATCHES.Z = 1;
+        }else if(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] > 0){
+            CURRENT_LATCHES.P = 1;
+        }else{
+            CURRENT_LATCHES.N = 1;
+        }
+        break;
+    case 0b0011: {//STB
+        int address = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] + ((instruction & 0b111111)<<1));
+        MEMORY[address>>1][address & 0b1] = Low16bits(CURRENT_LATCHES.REGS[instruction>>9 & 0b111] & 0xFF);
+        break;}
+    case 0b0111: {//STW
+        int address = Low16bits(CURRENT_LATCHES.REGS[instruction>>6 & 0b111] + (instruction & 0b111111));
+        MEMORY[address][0] = CURRENT_LATCHES.REGS[instruction>>9 & 0b111] & 0x00FF;
+        MEMORY[address][1] = CURRENT_LATCHES.REGS[instruction>>9 & 0b111] & 0xFF00;
+        break;}
+    case 0b1111: //TRAP (All forms)
+
+        break;
+    default:
+        // Should just do nothing
+        break;
+  }
+
+
+
+  // Go through various functions (see Appendices for instructions!)
+  // And thats it
+  // Badda Bing Badda Boom
 
 }
