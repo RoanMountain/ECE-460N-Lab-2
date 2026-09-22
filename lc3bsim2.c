@@ -414,6 +414,8 @@ int sext(int val, int numOfBits){
    }
 }
 
+
+
 void process_instruction(){
   /*  function: process_instruction
    *
@@ -424,8 +426,8 @@ void process_instruction(){
    *       -Update NEXT_LATCHES
    */
   NEXT_LATCHES = CURRENT_LATCHES; // Set everything in next latches equal to current latches
-  uint16_t instruction = (MEMORY[NEXT_LATCHES.PC][0] & 0x00FF) + (MEMORY[NEXT_LATCHES.PC][1]<<8 & 0xFF00); // Get instruction from MEMORY[PC] 0 and 1
-  NEXT_LATCHES.PC++; // Increment PC
+  uint16_t instruction = (MEMORY[NEXT_LATCHES.PC<<1][0] & 0x00FF) + (MEMORY[NEXT_LATCHES.PC<<1][1]<<8 & 0xFF00); // Get instruction from MEMORY[PC] 0 and 1
+  NEXT_LATCHES.PC += 2; // Increment PC
   switch ((instruction & 0xF000)>>12) {   // Decode instruction (1st 4 bits from PC into switch statement)
     case 0b0001: //ADD (Reg and Imm)
         if((instruction & 0b1<<5)==0){
@@ -533,7 +535,7 @@ void process_instruction(){
         if((instruction & 0b1<<4)==0){
             NEXT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(NEXT_LATCHES.REGS[instruction>>6 & 0b111] << (instruction & 0b1111));
         }else if((instruction & 0b1<<5)==0){
-            NEXT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits((uint16_t) NEXT_LATCHES.REGS[instruction>>6 & 0b111] >> (instruction & 0b1111));
+            NEXT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits((unsigned int) NEXT_LATCHES.REGS[instruction>>6 & 0b111] >> (instruction & 0b1111));
         }else {
             NEXT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(NEXT_LATCHES.REGS[instruction>>6 & 0b111] >> (instruction & 0b1111));
         }
@@ -558,7 +560,7 @@ void process_instruction(){
         MEMORY[address>>1][1] = NEXT_LATCHES.REGS[instruction>>9 & 0b111] & 0xFF00;
         break;}
     case 0b1111: {//TRAP (All forms)
-        int address = ((uint16_t) instruction&0xFF)<<1; // instruction&0xFF is recast as unsigned so it zero extends
+        int address = ((unsigned int) instruction&0xFF)<<1; // instruction&0xFF is recast as unsigned so it zero extends
         NEXT_LATCHES.REGS[7] = NEXT_LATCHES.PC; // Save PC into R7
         NEXT_LATCHES.PC = MEMORY[address>>1][address&0b1]; //Load first 15 bits of address into slot and last bit into slot 2
         break;}
