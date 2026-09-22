@@ -509,7 +509,7 @@ void process_instruction(){
         }
         break;}
     case 0b1110: //LEA
-        NEXT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(NEXT_LATCHES.PC + sext(instruction & 0b111111111,9));
+        NEXT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits(NEXT_LATCHES.PC + (sext(instruction & 0b111111111,9)<<1));
         break;
     case 0b1001: //NOT & XOR
         if((instruction & 0b1<<5)==0){
