@@ -426,7 +426,7 @@ void process_instruction(){
    *       -Update NEXT_LATCHES
    */
   NEXT_LATCHES = CURRENT_LATCHES; // Set everything in next latches equal to current latches
-  uint16_t instruction = (MEMORY[NEXT_LATCHES.PC<<1][0] & 0x00FF) + (MEMORY[NEXT_LATCHES.PC<<1][1]<<8 & 0xFF00); // Get instruction from MEMORY[PC] 0 and 1
+  uint16_t instruction = (MEMORY[NEXT_LATCHES.PC>>1][0] & 0x00FF) + (MEMORY[NEXT_LATCHES.PC>>1][1]<<8 & 0xFF00); // Get instruction from MEMORY[PC] 0 and 1
   NEXT_LATCHES.PC += 2; // Increment PC
   switch ((instruction & 0xF000)>>12) {   // Decode instruction (1st 4 bits from PC into switch statement)
     case 0b0001: //ADD (Reg and Imm)
@@ -496,7 +496,7 @@ void process_instruction(){
         break;}
     case 0b0110:{ //LDW
         int address = Low16bits(NEXT_LATCHES.REGS[instruction>>6 & 0b111] + (sext(instruction & 0b111111,6)<<1));
-        NEXT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits((MEMORY[address][1]<<8) + MEMORY[address][0]);
+        NEXT_LATCHES.REGS[instruction>>9 & 0b111] = Low16bits((MEMORY[address>>1][1]<<8) + MEMORY[address>>1][0]);
         NEXT_LATCHES.Z = 0;
         NEXT_LATCHES.P = 0;
         NEXT_LATCHES.N = 0;
