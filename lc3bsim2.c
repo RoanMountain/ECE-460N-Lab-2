@@ -557,7 +557,7 @@ void process_instruction(){
     case 0b0111: {//STW
         int address = Low16bits(NEXT_LATCHES.REGS[instruction>>6 & 0b111] + (sext(instruction & 0b111111,6)<<1)); // This doesnt sign extend properly
         MEMORY[address>>1][0] = NEXT_LATCHES.REGS[instruction>>9 & 0b111] & 0x00FF;
-        MEMORY[address>>1][1] = NEXT_LATCHES.REGS[instruction>>9 & 0b111] & 0xFF00;
+        MEMORY[address>>1][1] = (NEXT_LATCHES.REGS[instruction>>9 & 0b111] & 0xFF00)>>8;
         break;}
     case 0b1111: {//TRAP (All forms)
         int address = ((unsigned int) instruction&0xFF)<<1; // instruction&0xFF is recast as unsigned so it zero extends
